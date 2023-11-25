@@ -2,6 +2,10 @@ from django.db import models
 from django.utils.timezone import now
 
 
+SECONDS_IN_HOUR = 3600
+SECONDS_IN_MINUTE = 60
+
+
 class Passcard(models.Model):
     is_active = models.BooleanField(default=False)
     created_at = models.DateTimeField(auto_now=True)
@@ -37,9 +41,10 @@ class Visit(models.Model):
             return now() - visit.entered_at
 
     def format_duration(visit, duration):
-        hours = int(duration.total_seconds() // 3600)
-        minutes = int((duration.total_seconds() % 3600) // 60)
-        seconds = int(duration.total_seconds() % 60)
+        duration_seconds = duration.total_seconds()
+        hours = int(duration_seconds // SECONDS_IN_HOUR)
+        minutes = int((duration_seconds % SECONDS_IN_HOUR) // SECONDS_IN_MINUTE)
+        seconds = int(duration_seconds % SECONDS_IN_MINUTE)
         return "{0:02} ч {1:02} мин {2:02} сек".format(
             hours,
             minutes,
