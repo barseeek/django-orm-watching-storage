@@ -34,13 +34,13 @@ class Visit(models.Model):
             )
         )
 
-    def get_duration(visit):
-        if visit.leaved_at:
-            return visit.leaved_at - visit.entered_at
+    def get_duration(self):
+        if self.leaved_at:
+            return self.leaved_at - self.entered_at
         else:
-            return now() - visit.entered_at
+            return now() - self.entered_at
 
-    def format_duration(visit, duration):
+    def format_duration(self, duration):
         duration_seconds = duration.total_seconds()
         hours = int(duration_seconds // SECONDS_IN_HOUR)
         minutes = int((duration_seconds % SECONDS_IN_HOUR) // SECONDS_IN_MINUTE)
@@ -51,5 +51,5 @@ class Visit(models.Model):
             seconds
             )
 
-    def is_visit_long(visit, minutes=60):
-        return visit.get_duration().total_seconds() > (minutes*60)
+    def is_visit_long(self, minutes=60):
+        return self.get_duration().total_seconds() > (minutes*60)
