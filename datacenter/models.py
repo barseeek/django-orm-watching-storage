@@ -36,15 +36,15 @@ class Visit(models.Model):
         else:
             return now() - visit.entered_at
 
-    def format_duration(duration):
+    def format_duration(visit, duration):
+        hours = int(duration.total_seconds() // 3600)
+        minutes = int((duration.total_seconds() % 3600) // 60)
+        seconds = int(duration.total_seconds() % 60)
         return "{0:02} ч {1:02} мин {2:02} сек".format(
-            int(duration.total_seconds() // 3600),
-            int((duration.total_seconds() % 3600) // 60),
-            int(duration.total_seconds() % 60)
+            hours,
+            minutes,
+            seconds
             )
 
     def is_visit_long(visit, minutes=60):
-        if Visit.get_duration(visit).seconds > (minutes*60):
-            return True
-        else:
-            return False
+        return visit.get_duration().total_seconds() > (minutes*60)
